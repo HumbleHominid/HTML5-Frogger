@@ -1,0 +1,240 @@
+<html>
+	<!-- Styles for the html page -->
+	<style>
+		#myCanvas {
+			width: 800px;
+			height: 450px;
+
+			border: 1px solid #000;
+		}
+	</style>
+
+	<!-- The canvas element itself -->
+	<canvas id="myCanvas" height="450px" width="800px"></canvas>
+
+	<!-- The js controller -->
+	<script>
+		var canvas = document.getElementById('myCanvas');
+		var ctx = canvas.getContext('2d');
+		
+		// { speed: 1,  object: [{ length: 0, y: 0, hurt: false }] }
+		var obstacles = [
+			{
+				speed: 0.2,
+				direction: 1,
+				objects: [
+					{
+						length: 50,
+						y: 0,
+						hurt: true,
+						color: 'red'
+					},
+					{
+						length: 50,
+						y: 150,
+						hurt: true,
+						color: 'red'
+					},
+					{
+						length: 50,
+						y: 300,
+						hurt: true,
+						color: 'red'
+					},
+					{
+						length: 50,
+						y: 450,
+						hurt: true,
+						color: 'red'
+					},
+					{
+						length: 50,
+						y: 600,
+						hurt: true,
+						color: 'red'
+					}
+				]
+			},
+			{
+				speed: 0.15,
+				direction: -1,
+				objects: [
+					{
+						length: 100,
+						y: 0,
+						hurt: true,
+						color: 'red'
+					},
+					{
+						length: 100,
+						y: 225,
+						hurt: true,
+						color: 'red'
+					},
+					{
+						length: 100,
+						y: 450,
+						hurt: true,
+						color: 'red'
+					}
+				]
+			},
+			{
+				speed: 0.75,
+				direction: 1,
+				objects: [
+					{
+						length: 50,
+						y: 0,
+						hurt: true,
+						color: 'red'
+					},
+					{
+						length: 100,
+						y: 175,
+						hurt: true,
+						color: 'red'
+					},
+					{
+						length: 50,
+						y: 425,
+						hurt: true,
+						color: 'red'
+					},
+					{
+						length: 100,
+						y: 575,
+						hurt: true,
+						color: 'red'
+					}
+				]
+			},
+			{
+				speed: 0.1,
+				direction: -1,
+				objects: [
+					{
+						length: 125,
+						y: 0,
+						hurt: false,
+						color: 'brown'
+					},
+					{
+						length: 125,
+						y: 200,
+						hurt: false,
+						color: 'brown'
+					},
+					{
+						length: 125,
+						y: 400,
+						hurt: false,
+						color: 'brown'
+					},
+					{
+						length: 125,
+						y: 600,
+						hurt: false,
+						color: 'brown'
+					}
+
+				]
+			},
+			{
+				speed: 0.75,
+				direction: -1,
+				objects: [
+					{
+						length: 150,
+						y: 0,
+						hurt: false,
+						color: 'brown'
+					},
+					{
+						length: 150,
+						y: 225,
+						hurt: false,
+						color: 'brown'
+					},
+					{
+						length: 150,
+						y: 450,
+						hurt: false,
+						color: 'brown'
+					},
+					{
+						length: 150,
+						y: 675,
+						hurt: false,
+						color: 'brown'
+					}
+				]
+			},
+			{
+				speed: 2,
+				direction: 1,
+				objects: [
+					{
+						length: 100,
+						y: 0,
+						hurt: false,
+						color: 'brown'
+					},
+					{
+						length: 100,
+						y: 375,
+						hurt: false,
+						color: 'brown'
+					}
+				]
+			}
+		]
+		
+		setInterval(() => drawCanvas(), 1/60);
+
+		function drawCanvas() {
+			ctx.clearRect(0, 0, 450, 800);
+
+			ctx.fillStyle = 'blue';
+			ctx.fillRect(50, 0, 400, 450);
+
+			ctx.fillStyle = 'grey';
+			ctx.fillRect(450, 0, 300, 450);
+
+			ctx.fillStyle = '#DEB887';
+			ctx.fillRect(400, 0, 50, 450)
+
+			ctx.fillStyle = '#51ff85';
+			ctx.fillRect(0, 0, 100, 450);
+			ctx.fillRect(750, 0, 50, 450);
+
+			// Draws the lines on the road
+			for (let i = 0; i < 2; i++) {
+				ctx.fillStyle = 'white';
+
+				for (let j = 0; j < 18; j++) {
+					if (j % 3 == 1) {
+						ctx.fillRect(450 + ((i + 1) * 100), 0 + 10 * (j * 3), 5, 20);
+					}
+				}
+			}
+
+			moveObstacles();
+		}
+
+		function moveObstacles() {
+			var pos = 675;
+
+			obstacles.forEach((obstacle, index) => {
+				obstacle.objects.forEach((obj) => {
+					obj.y = (obj.y + obstacle.speed) % 750;
+
+					ctx.fillStyle = obj.color;
+					
+					ctx.fillRect(pos - (index * 100 + (index > 2 ? 50 : 0)),
+							obstacle.direction === 1 ? -150 + obj.y : 600 - obj.y, 50, obj.length);
+				});
+			});
+		}
+	</script>
+</html>
